@@ -1,6 +1,9 @@
+"use client"
+
 import { fetchData, postData } from "@/lib/fetch-utils"
-import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { InfiniteData, useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { CommentsResponse } from "../api/comments/route"
+import { Comment, comments } from "../api/comments/data"
 
 export function useCommentsQuery() {
     // useInfiniteQuery is used when data is split into multiple pages (cursor-based or page-based pagination)
@@ -39,13 +42,32 @@ export function useCommentsQuery() {
 
 }
 
-export function useCreateCommentMutation(){
+export function useCreateCommentMutation() {
     const queryClient = useQueryClient()
 
     return useMutation({
-        mutationFn: (newComment: {text: string}) => postData('/api/comments', newComment),
-        onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ["comments"]});
+        mutationFn: (newComment: { text: string }) => postData<{comment: Comment}>('/api/comments', newComment),
+        onSuccess: async ({comment}) => {
+            // queryClient.invalidateQueries({queryKey: ["comments"]});
+            await queryClient.cancelQueries({queryKey: ["comments"]})
+            queryClient.setQueryData<InfiniteData<CommentsResponse, number | undefined>>(["comments"],
+                (oldData) => {
+                    const firstPage = oldData?.pages[0];
+
+                    if (firstPage) {
+                        return {
+                            ...oldData,
+                            pages: [
+                                {
+                                    ...firstPage,
+                                    totalComments: firstPage.totalComments + 1,
+                                    comments: [comment, ...firstPage.comments]
+                                },
+                                ...oldData.pages.slice(1)
+                            ]
+                        }
+                    }
+                })
         }
     })
 }
