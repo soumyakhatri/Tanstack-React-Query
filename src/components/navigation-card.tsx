@@ -7,6 +7,7 @@ interface NavigationCardProps {
 }
 
 export function NavigationCard({ title, description, href }: NavigationCardProps) {
+  
   return (
     <Link
       href={href}
