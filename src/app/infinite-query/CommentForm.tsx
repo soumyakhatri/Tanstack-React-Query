@@ -1,13 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
-import { useCreateCommentMutation } from "./use-comments-hooks";
 import { toast } from "sonner";
+// import { useCreateCommentMutation } from "./use-comments-hooks";
+import { useCreateCommentMutationOptimistic } from "./use-comments-hook-optimistic";
 
 export function CommentForm() {
   const [commentText, setCommentText] = useState("");
 
-  const { mutate, error, isError, isPending } = useCreateCommentMutation()
+  // const { mutate, error, isPending } = useCreateCommentMutation()
+  const { mutate, error, isPending } = useCreateCommentMutationOptimistic()
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();

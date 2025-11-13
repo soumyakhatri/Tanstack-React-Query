@@ -46,28 +46,37 @@ export function useCreateCommentMutation() {
     const queryClient = useQueryClient()
 
     return useMutation({
-        mutationFn: (newComment: { text: string }) => postData<{comment: Comment}>('/api/comments', newComment),
-        onSuccess: async ({comment}) => {
+        mutationFn: (newComment: { text: string }) => postData<{ comment: Comment }>('/api/comments', newComment),
+        onSuccess: async ({ comment }) => {
             // queryClient.invalidateQueries({queryKey: ["comments"]});
-            await queryClient.cancelQueries({queryKey: ["comments"]})
-            queryClient.setQueryData<InfiniteData<CommentsResponse, number | undefined>>(["comments"],
-                (oldData) => {
-                    const firstPage = oldData?.pages[0];
 
-                    if (firstPage) {
-                        return {
-                            ...oldData,
-                            pages: [
-                                {
-                                    ...firstPage,
-                                    totalComments: firstPage.totalComments + 1,
-                                    comments: [comment, ...firstPage.comments]
-                                },
-                                ...oldData.pages.slice(1)
-                            ]
+            await queryClient.cancelQueries({ queryKey: ["comments"] })
+            queryClient.setQueryData<InfiniteData<CommentsResponse, number | undefined>>
+                (
+                    ["comments"],
+                    (oldData) => {
+                        const firstPage = oldData?.pages[0];
+                        if (firstPage) {
+                            return {
+                                ...oldData,
+                                pages: [
+                                    {
+                                        ...firstPage,
+                                        totalComments: firstPage.totalComments + 1,
+                                        comments: [comment, ...firstPage.comments]
+                                    },
+                                    ...oldData.pages.slice(1)
+                                ]
+                            }
                         }
                     }
-                })
+                )
         }
     })
 }
+
+
+// as soon as the comment is posted and we get the response we are updating our list
+// if it is infinite query then there will be many calls and it takes more time to get the updated list therefore we are not using invalidateQueries
+// we are updating our list of comments (cache) optimistically
+// this makes sense for infinite query.
