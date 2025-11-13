@@ -1,9 +1,6 @@
 import { formatRelativeDate } from "@/lib/utils";
 import { CommentForm } from "./CommentForm";
 import { Button } from "@/components/ui/button";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { CommentsResponse } from "../api/comments/route";
-import { fetchData } from "@/lib/fetch-utils";
 import { useCommentsQuery } from "./use-comments-hooks";
 
 export default function InfiniteComments() {

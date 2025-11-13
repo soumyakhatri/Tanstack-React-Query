@@ -1,9 +1,9 @@
 "use client"
 
 import { fetchData, postData } from "@/lib/fetch-utils"
-import { InfiniteData, useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { InfiniteData, useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { CommentsResponse } from "../api/comments/route"
-import { Comment, comments } from "../api/comments/data"
+import { Comment } from "../api/comments/data"
 
 export function useCommentsQuery() {
     // useInfiniteQuery is used when data is split into multiple pages (cursor-based or page-based pagination)
