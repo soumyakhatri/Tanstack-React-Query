@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import FetchWithUseEffect from "./FetchWithUseEffect";
+import FetchWithUseEffectFixed from "./FetchWithUseEffectFixed";
 
 export default function ProblemsWithUseEffectPage() {
   const [category, setCategory] = useState("technology");
@@ -61,7 +62,7 @@ export default function ProblemsWithUseEffectPage() {
           <div className="bg-green-100 p-3 font-medium border-b">
             Solution: useEffect with Fixes
           </div>
-          {/* <FetchWithUseEffectFixed category={category} /> */}
+          <FetchWithUseEffectFixed category={category} />
         </div>
       </div>
 

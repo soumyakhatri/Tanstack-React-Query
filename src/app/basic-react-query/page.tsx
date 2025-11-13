@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import FetchWithReactQuery from "./FetchWithReactQuery";
 
 export default function BasicReactQueryPage() {
   const [category, setCategory] = useState("technology");
@@ -49,7 +50,7 @@ export default function BasicReactQueryPage() {
           <div className="bg-green-100 p-3 font-medium border-b">
             React Query Example
           </div>
-          {/* <FetchWithReactQuery category={category} /> */}
+          <FetchWithReactQuery category={category} />
         </div>
       </div>
 
